@@ -1,0 +1,5 @@
+print
+delete
+delete 1
+print 2
+delete 121 1

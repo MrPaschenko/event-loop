@@ -5,11 +5,11 @@ import (
 	"github.com/MrPaschenko/event-loop/engine"
 )
 
-type printCommand struct {
+type PrintCommand struct {
 	output string
 }
 
-func (print *printCommand) Execute(loop engine.Handler) {
+func (print *PrintCommand) Execute(loop engine.Handler) {
 	fmt.Println(print.output)
 }
 
@@ -19,11 +19,11 @@ type Delete struct {
 
 func (d *Delete) Execute(handler engine.Handler) {
 	if len(d.Args) != 2 {
-		handler.Post(&printCommand{output: "less than two arguments"})
+		handler.Post(&PrintCommand{output: "less than two arguments"})
 		return
 	}
-	str := d.Args[0]
-	symb := d.Args[1]
+	str := d.Args[1]
+	symb := d.Args[2]
 
 	res := ""
 	for _, c := range str {
@@ -32,5 +32,5 @@ func (d *Delete) Execute(handler engine.Handler) {
 			res += char
 		}
 	}
-	handler.Post(&printCommand{output: res})
+	handler.Post(&PrintCommand{output: res})
 }
