@@ -18,8 +18,8 @@ type Delete struct {
 }
 
 func (d *Delete) Execute(handler engine.Handler) {
-	if len(d.Args) != 2 {
-		handler.Post(&PrintCommand{output: "less than two arguments"})
+	if len(d.Args) != 3 {
+		handler.Post(&PrintCommand{output: "invalid number of arguments"})
 		return
 	}
 	str := d.Args[1]
