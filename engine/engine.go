@@ -12,7 +12,7 @@ type Handler interface {
 	Post(cmd Command)
 }
 
-type Queue struct {
+type queue struct {
 	sync.Mutex
 	data             []Command
 	receiveSignal    chan struct{}
@@ -20,12 +20,12 @@ type Queue struct {
 }
 
 type Loop struct {
-	mq          *Queue
+	mq          *queue
 	stopSignal  chan struct{}
 	stopRequest bool
 }
 
-func (mq *Queue) push(command Command) {
+func (mq *queue) push(command Command) {
 	mq.Lock()
 	defer mq.Unlock()
 
@@ -37,7 +37,7 @@ func (mq *Queue) push(command Command) {
 
 }
 
-func (mq *Queue) pull() Command {
+func (mq *queue) pull() Command {
 	mq.Lock()
 	defer mq.Unlock()
 
@@ -54,12 +54,12 @@ func (mq *Queue) pull() Command {
 	return res
 }
 
-func (mq *Queue) empty() bool {
+func (mq *queue) empty() bool {
 	return len(mq.data) == 0
 }
 
 func (l *Loop) Start() {
-	l.mq = &Queue{receiveSignal: make(chan struct{})}
+	l.mq = &queue{receiveSignal: make(chan struct{})}
 	l.stopSignal = make(chan struct{})
 	go func() {
 		for !l.stopRequest || !l.mq.empty() {
